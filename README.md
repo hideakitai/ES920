@@ -38,7 +38,7 @@ void setup()
 
     // common
     config.channel = ES920::ChannelRate50kbps::CH01_920_6_MHZ;
-    config.panid = 0x000`1;
+    config.panid = 0x0001;
     config.ownid = 0x0001;
     config.dstid = 0x0000;
     config.operation = ES920::Mode::OPERATION;
