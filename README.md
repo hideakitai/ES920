@@ -604,7 +604,7 @@ namespace ChannelBW500kHz
 
 - [ArxContainer v0.3.7](https://github.com/hideakitai/ArxContainer)
 - [ArxStringUtils v0.2.2](https://github.com/hideakitai/ArxStringUtils)
-- [DebugLog v0.1.9](https://github.com/hideakitai/DebugLog)
+- [DebugLog v0.2.0](https://github.com/hideakitai/DebugLog)
 - [Packetizer v0.4.5](https://github.com/hideakitai/Packetizer)
 - [TeensyDirtySTLErrorSolution v0.1.0](https://github.com/hideakitai/TeensyDirtySTLErrorSolution)
 
