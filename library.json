@@ -2,18 +2,16 @@
     "name": "ES920",
     "keywords": "ES920,ES920LR,serial,uart,LoRa,FSK",
     "description": "Arduino library for ES920/ES920LR FSK/LoRa wireless module",
-    "repository":
-    {
+    "repository": {
         "type": "git",
         "url": "https://github.com/hideakitai/ES920.git"
     },
-    "authors":
-    {
+    "authors": {
         "name": "Hideaki Tai",
         "url": "https://github.com/hideakitai",
         "maintainer": true
     },
-    "version": "0.1.1",
+    "version": "0.1.2",
     "license": "MIT",
     "frameworks": "arduino",
     "platforms": "*"
