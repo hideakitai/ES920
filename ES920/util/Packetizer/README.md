@@ -37,7 +37,7 @@ These options are disabled by default.
 If you use them, original data array is modified like:
 
 | index  | data    | crc8   |
-|--------|---------|--------|
+| ------ | ------- | ------ |
 | 1 byte | N bytes | 1 byte |
 
 CRC8 will be calcurated including index byte.
@@ -111,7 +111,7 @@ void setup()
         [&](const uint8_t index, const uint8_t* data, const size_t size)
         {
             // send back to same index
-            Packetizer::send(Serial, index, packet.data(), packet.size());
+            Packetizer::send(Serial, index, data, size);
         }
     );
 }
@@ -128,12 +128,12 @@ void loop()
 Just to encode / decode packets, you can use global mathod like:
 
 ```C++
-Packetizer::Packet p_in {0x11, 0x22, 0x00, 0x33};
-const auto& p_buff = Packetizer::encode(p_in.data(), p_in.size());
-const auto& p_out = Packetizer::decode(p_buff.data(), p_buff.size());
+Packetizer::Packet p_in {0xAB, {0x11, 0x22, 0x00, 0x33}}; // {index, {data}}
+const auto& p_buff = Packetizer::encode(p_in.index, p_in.data.data(), p_in.data.size());
+const auto& p_out = Packetizer::decode(p_buff.data.data(), p_buff.data.size());
 ```
 
-`Packetizer::Packet` is alias for `std::vector<uint8_t>`.
+`Packetizer::Packet` is alias for `struct { uint8_t index; std::vector<uint8_t> data };`.
 
 
 ## Other Options
@@ -189,7 +189,7 @@ None
 ## Embedded Libraries
 
 - [ArxTypeTraits v0.1.12](https://github.com/hideakitai/ArxTypeTraits)
-- [ArxContainer v0.3.7](https://github.com/hideakitai/ArxContainer)
+- [ArxContainer v0.3.8](https://github.com/hideakitai/ArxContainer)
 - [ArxSmartPtr v0.1.2](https://github.com/hideakitai/ArxSmartPtr)
 - [CRCx v0.2.1](https://github.com/hideakitai/CRCx)
 - [TeensyDirtySTLErrorSolution v0.1.0](https://github.com/hideakitai/TeensyDirtySTLErrorSolution)
@@ -198,6 +198,7 @@ None
 ## Used Inside of
 
 - [MsgPacketizer](https://github.com/hideakitai/MsgPacketizer)
+- [ES920](https://github.com/hideakitai/ES920)
 
 
 ## License
