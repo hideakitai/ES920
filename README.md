@@ -602,7 +602,7 @@ namespace ChannelBW500kHz
 
 ## Embedded Libraries
 
-- [ArxContainer v0.3.7](https://github.com/hideakitai/ArxContainer)
+- [ArxContainer v0.3.9](https://github.com/hideakitai/ArxContainer)
 - [ArxStringUtils v0.2.2](https://github.com/hideakitai/ArxStringUtils)
 - [DebugLog v0.3.1](https://github.com/hideakitai/DebugLog)
 - [Packetizer v0.5.1](https://github.com/hideakitai/Packetizer)
