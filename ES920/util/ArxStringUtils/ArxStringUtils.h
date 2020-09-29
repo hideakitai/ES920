@@ -2,14 +2,6 @@
 #ifndef ARX_STRINGUTILS_H
 #define ARX_STRINGUTILS_H
 
-#if defined(ARDUINO_ARCH_AVR)\
- || defined(ARDUINO_ARCH_MEGAAVR)\
- || defined(ARDUINO_ARCH_SAM)\
- || defined(ARDUINO_ARCH_SAMD)\
- || defined(ARDUINO_spresense_ast)
-    #define ARX_ARXSTRINGUTILS_STL_DISABLED
-#endif
-
 #ifdef ARDUINO
 #include <Arduino.h>
     #define ARXSTRUTIL_STRING_CAST(b) String(b)
@@ -180,7 +172,7 @@ namespace str {
 
 
 #ifdef ARDUINO
-#ifndef ARX_ARXSTRINGUTILS_STL_DISABLED
+#if ARX_HAVE_LIBSTDCPLUSPLUS >= 201103L // Have libstdc++11
 
     #include <vector>
 
