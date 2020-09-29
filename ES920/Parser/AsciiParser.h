@@ -3,20 +3,15 @@
 #define ARDUINO_ES920_ASCII_PARSER_H
 
 #include "../Constants.h"
-
-#ifdef ES920_DISABLE_STL
-    #include "../util/ArxContainer/ArxContainer.h"
-#else
-    #include <deque>
-#endif
+#include "../util/ArxContainer/ArxContainer.h"
 
 namespace arduino {
 namespace es920 {
 
-#ifdef ES920_DISABLE_STL
-    using Buffer = arx::deque<StringType, 4>;
-#else
+#if ARX_HAVE_LIBSTDCPLUSPLUS >= 201103L // Have libstdc++11
     using Buffer = std::deque<StringType>;
+#else
+    using Buffer = arx::deque<StringType, 4>;
 #endif
     // typedef void (*AsciiCallbackType)(const StringType& str);
     using AsciiCallbackType = std::function<void(const StringType& str)>;

@@ -2,21 +2,10 @@
 #ifndef ARDUINO_ES920_H
 #define ARDUINO_ES920_H
 
-#if defined(ARDUINO_ARCH_AVR)\
- || defined(ARDUINO_ARCH_MEGAAVR)\
- || defined(ARDUINO_ARCH_SAMD)\
- || defined(ARDUINO_spresense_ast)
-    #define ES920_DISABLE_STL
-#endif
-
 #define PACKETIZER_USE_INDEX_AS_DEFAULT
 #define PACKETIZER_USE_CRC_AS_DEFAULT
 
-#ifdef ES920_DISABLE_STL
-    #include "ES920/util/ArxContainer/ArxContainer.h"
-#else
-    #include <vector>
-#endif
+#include "ES920/util/ArxContainer/ArxContainer.h"
 #include "ES920/util/DebugLog/DebugLog.h"
 #include "ES920/util/ArxStringUtils/ArxStringUtils.h"
 
