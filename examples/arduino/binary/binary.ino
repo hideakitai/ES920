@@ -67,7 +67,7 @@ void setup()
     // - b_force_config : (optional, default = true) force to write config data if b_config_check is true
     // - b_verbose      : (optional, default = false) show verbose log to your usb-serial (Serial)
 
-    if (subghz.begin(Serial3, config, true, true, false))
+    if (subghz.begin(Serial1, config, true, true, false))
         Serial.println("begin ES920 sucess!");
     else
         Serial.println("begin ES920 failed!");
