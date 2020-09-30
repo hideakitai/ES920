@@ -22,6 +22,7 @@
     #define ARXSTRUTIL_STRING_TO_INT(s) std::stoi(s)
 #endif
 #include "util/ArxTypeTraits/ArxTypeTraits.h"
+#include "util/ArxContainer/ArxContainer.h"
 
 namespace arx {
 namespace str {
@@ -30,6 +31,14 @@ namespace str {
     using StringType = String;
 #else
     using StringType = std::string;
+#endif
+
+#if ARX_HAVE_LIBSTDCPLUSPLUS >= 201103L // Have libstdc++11
+    using StringVec = std::vector<StringType>;
+    using StringPos = std::vector<size_t>;
+#else
+    using StringVec = arx::vector<StringType>;
+    using StringPos = arx::vector<size_t>;
 #endif
 
     namespace detail
@@ -172,15 +181,12 @@ namespace str {
 
 
 #ifdef ARDUINO
-#if ARX_HAVE_LIBSTDCPLUSPLUS >= 201103L // Have libstdc++11
 
-    #include <vector>
-
-    inline std::vector<StringType> split_string(const StringType& s, const StringType& delim)
+    inline StringVec split_string(const StringType& s, const StringType& delim)
     {
-        std::vector<StringType> result;
-        std::vector<size_t> pos;
-        // std::vector<size_t> length;
+        StringVec result;
+        StringPos pos;
+
         pos.emplace_back(0);
         for (size_t i = 0; i < s.length(); ++i)
         {
@@ -210,7 +216,6 @@ namespace str {
         return result; // local value will be moved
     }
 
-#endif
 #endif
 
 //    String to_bin(const String& value)
