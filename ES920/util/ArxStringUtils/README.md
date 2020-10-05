@@ -27,7 +27,13 @@ std::vector<String> split_string(const String& str, const String& delim);
 
 ## Embedded Libraries
 
-- [ArxTypeTraits v0.2.0](https://github.com/hideakitai/ArxTypeTraits)
+- [ArxTypeTraits v0.2.1](https://github.com/hideakitai/ArxTypeTraits)
+- [ArxContainer v0.3.10](https://github.com/hideakitai/ArxContainer)
+
+
+## Used Inside of
+
+- [ES920](https://github.com/hideakitai/ES920)
 
 
 ## License
