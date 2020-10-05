@@ -69,7 +69,7 @@ namespace str {
         inline auto to_int(const StringType &intString)
         -> typename std::enable_if<std::is_integral<T>::value, T>::type
         {
-            return (T)intString.toInt();
+            return (T)ARXSTRUTIL_STRING_TO_INT(intString);
         }
     }
 
@@ -144,7 +144,7 @@ namespace str {
     -> typename std::enable_if<std::is_integral<T>::value, StringType>::type
     {
         StringType format;
-        format = "%0" + String(width) + "d";
+        format = "%0" + ARXSTRUTIL_STRING_CAST(width) + "d";
         const size_t str_len = string_length(value);
         const size_t len = (width > str_len) ? width : str_len;
         char dec[len + 1];
@@ -164,7 +164,7 @@ namespace str {
     -> typename std::enable_if<std::is_floating_point<T>::value, StringType>::type
     {
         StringType format;
-        format = "%0" + String(width) + "." + String(precision) + "f";
+        format = "%0" + ARXSTRUTIL_STRING_CAST(width) + "." + ARXSTRUTIL_STRING_CAST(precision) + "f";
         const size_t str_len = String(value).length();
         const size_t len = (width > str_len) ? width : str_len;
         char dec[len + 1];
