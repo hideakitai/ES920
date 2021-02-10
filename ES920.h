@@ -91,12 +91,7 @@ namespace es920 {
         {
             verbose(b_verbose);
             configs = cfg;
-#ifdef ARDUINO
-            ES920_SERIAL_BEGIN(s, configToBaudrate(configs.baudrate));
-#elif defined OF_VERSION_MAJOR
-            ES920_SERIAL_END(s);
-            ES920_SERIAL_BEGIN(s, configs.device, configToBaudrate(configs.baudrate));
-#endif
+            changeBaudRate(s);
             stream = (Stream*)&s;
             stream->flush();
             configurator.attach(s);
@@ -118,6 +113,9 @@ namespace es920 {
             attach(s, cfg, b_verbose);
 
 #ifdef ARDUINO
+#ifdef ESP_PLATFORM
+            s.begin(configToBaudrate(cfg.baudrate));
+#endif
             reset();
             if (!b_config_check) return detectReset();
 #else
@@ -216,13 +214,8 @@ namespace es920 {
             // finally change baudrate
             LOG_VERBOSE("change to baudrate", configToBaudrate(configs.baudrate));
             success &= baudrate(configs.baudrate); // baudrate will be changed right after this command
-            ES920_SERIAL_END(s);
             wait(100);
-#ifdef ARDUINO
-            ES920_SERIAL_BEGIN(s, configToBaudrate(configs.baudrate)); // restart Serial as desired baudrate
-#elif defined OF_VERSION_MAJOR
-            ES920_SERIAL_BEGIN(s, configs.device, configToBaudrate(configs.baudrate)); // restart Serial as desired baudrate
-#endif
+            changeBaudRate(s);
             wait(100);
             LOG_VERBOSE("changed baudrate to", configToBaudrate(configs.baudrate));
             LOG_VERBOSE("configuration done, change to operation mode");
@@ -921,6 +914,20 @@ namespace es920 {
         }
 #endif
 
+        template <typename SerialType>
+        void changeBaudRate(SerialType& s)
+        {
+#ifdef ARDUINO
+#ifdef ESP_PLATFORM
+            s.updateBaudRate(configToBaudrate(configs.baudrate));
+#else
+            ES920_SERIAL_BEGIN(s, configToBaudrate(configs.baudrate));
+#endif
+#elif defined OF_VERSION_MAJOR
+            ES920_SERIAL_END(s);
+            ES920_SERIAL_BEGIN(s, configs.device, configToBaudrate(configs.baudrate));
+#endif
+        }
     };
 
 
