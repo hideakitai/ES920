@@ -140,7 +140,7 @@ namespace es920 {
                     LOG_VERBOSE("retry with default 115200 baud");
                     Config c = cfg;
                     c.baudrate = Baudrate::BD_115200;
-                    attach(s, c);
+                    attach(s, c, b_verbose);
                     reset();
 
                     if (detectReset())
@@ -150,7 +150,7 @@ namespace es920 {
                     }
                     else
                     {
-                        attach(s, cfg);
+                        attach(s, cfg, b_verbose);
                         LOG_ERROR("cannot connect to module! please check wiring");
                         return false;
                     }
