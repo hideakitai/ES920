@@ -50,7 +50,6 @@ namespace es920 {
             while (stream->available())
             {
                 uint8_t d = ES920_READ_BYTE();
-                LOG_VERBOSE((char)d, (int)d);
                 asc_parser.feed(d, b_rssi, b_rcvid, b_exec_cb);
             }
             return availableAscii();
@@ -61,7 +60,6 @@ namespace es920 {
             while (stream->available())
             {
                 uint8_t d = ES920_READ_BYTE();
-                LOG_VERBOSE((char)d, (int)d);
                 bin_parser.feed(d, b_rssi, b_rcvid, b_exec_cb);
             }
             return availableBinary();
