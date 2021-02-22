@@ -754,15 +754,18 @@ namespace es920 {
 
         void reset()
         {
-            stream->flush();
-            while (stream->available()) ES920_READ_BYTE();
-            parser.clear();
 #ifdef ARDUINO
             reset(true);
             delay(wait_reset_gpio_ms);
+            stream->flush();
+            while (stream->available()) ES920_READ_BYTE();
+            parser.clear();
             reset(false);
             LOG_VERBOSE("reset signal trigger done");
 #else
+            stream->flush();
+            while (stream->available()) ES920_READ_BYTE();
+            parser.clear();
             PRINTLN("please push reset button");
             wait(wait_reset_manual_ms);
 #endif
