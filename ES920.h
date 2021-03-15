@@ -93,7 +93,6 @@ namespace es920 {
             configs = cfg;
             changeBaudRate(s);
             stream = (Stream*)&s;
-            stream->flush();
             configurator.attach(s);
             sender.attach(s);
             parser.attach(s, configs.baudrate);
@@ -102,6 +101,8 @@ namespace es920 {
             if (isResetPinSelected())
                 pinMode(PIN_RST, OUTPUT);
 #endif
+            stream->flush();
+            while (stream->available()) stream->read();
         }
 
         template <typename SerialType>
