@@ -15,6 +15,12 @@
 #include "ES920/util/TeensyDirtySTLErrorSolution/TeensyDirtySTLErrorSolution.h"
 #endif
 
+#ifdef ES920_DEBUGLOG_ENABLE
+#include "ES920/util/DebugLog/DebugLogEnable.h"
+#else
+#include "ES920/util/DebugLog/DebugLogDisable.h"
+#endif
+
 #include "ES920/Constants.h"
 #include "ES920/Utils.h"
 #include "ES920/Configurator.h"
@@ -951,5 +957,7 @@ namespace es920 {
 }  // namespace arduino
 
 namespace ES920 = arduino::es920;
+
+#include "ES920/util/DebugLog/DebugLogRestoreState.h"
 
 #endif  // ARDUINO_ES920_H
