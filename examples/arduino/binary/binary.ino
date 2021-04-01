@@ -1,3 +1,4 @@
+// #define ES920_DEBUGLOG_ENABLE
 #include <ES920.h>
 
 const uint8_t PIN_RST {9};
