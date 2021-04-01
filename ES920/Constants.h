@@ -7,12 +7,11 @@ namespace es920 {
 
 #ifdef ARDUINO
     using StringType = String;
-#elif defined (OF_VERSION_MAJOR)
+#elif defined(OF_VERSION_MAJOR)
     using StringType = std::string;
 #endif
 
-    enum class ErrorCode : uint8_t
-    {
+    enum class ErrorCode : uint8_t {
         UndefinedCommand = 1,
         OptionValue = 2,
         FlashErase = 3,
@@ -24,29 +23,24 @@ namespace es920 {
         MissingAck = 103
     };
 
-
     // common
 
-    enum class Mode : uint8_t
-    {
+    enum class Mode : uint8_t {
         CONFIG = 1,
         OPERATION
     };
 
-    enum class Node : uint8_t
-    {
+    enum class Node : uint8_t {
         COORDINATOR = 1,
         ENDDEVICE
     };
 
-    enum class TransMode : uint8_t
-    {
+    enum class TransMode : uint8_t {
         PAYLOAD = 1,
         FRAME
     };
 
-    enum class Baudrate : uint8_t
-    {
+    enum class Baudrate : uint8_t {
         BD_9600 = 1,
         BD_19200,
         BD_38400,
@@ -55,32 +49,26 @@ namespace es920 {
         BD_230400
     };
 
-    enum class SleepMode : uint8_t
-    {
-        NO_SLEEP= 1,
+    enum class SleepMode : uint8_t {
+        NO_SLEEP = 1,
         TIMER_WAKEUP,
         INT_WAKEUP
     };
 
-    enum class Format : uint8_t
-    {
+    enum class Format : uint8_t {
         ASCII = 1,
         BINARY
     };
 
-
     // only for ES920
 
-    enum class Rate : uint8_t
-    {
+    enum class Rate : uint8_t {
         RATE_50KBPS = 1,
         RATE_100KBPS
     };
 
-    namespace ChannelRate50kbps
-    {
-        enum ChannelRate50kbps : uint8_t
-        {
+    namespace ChannelRate50kbps {
+        enum ChannelRate50kbps : uint8_t {
             CH01_920_6_MHZ = 1,
             CH02_920_8_MHZ,
             CH03_921_0_MHZ,
@@ -122,10 +110,8 @@ namespace es920 {
         };
     }
 
-    namespace ChannelRate100kbps
-    {
-        enum ChannelRate100kbps : uint8_t
-        {
+    namespace ChannelRate100kbps {
+        enum ChannelRate100kbps : uint8_t {
             CH01_920_7_MHZ = 1,
             CH02_921_1_MHZ,
             CH03_921_5_MHZ,
@@ -148,20 +134,17 @@ namespace es920 {
         };
     }
 
-
     // only for ES920LR
 
-    enum class BW : uint8_t
-    {
+    enum class BW : uint8_t {
         BW_62_5_KHZ = 3,
-        BW_125_KHZ, // default
+        BW_125_KHZ,  // default
         BW_250_KHZ,
         BW_500_KHZ
     };
 
-    enum class SF : uint8_t
-    {
-        SF_7 = 7, // default
+    enum class SF : uint8_t {
+        SF_7 = 7,  // default
         SF_8,
         SF_9,
         SF_10,
@@ -169,10 +152,8 @@ namespace es920 {
         SF_12
     };
 
-    namespace ChannelBW62_5kHz
-    {
-        enum ChannelBW62_5kHz : uint8_t
-        {
+    namespace ChannelBW62_5kHz {
+        enum ChannelBW62_5kHz : uint8_t {
             CH01_920_6_MHZ = 1,
             CH02_920_8_MHZ,
             CH03_921_0_MHZ,
@@ -191,10 +172,8 @@ namespace es920 {
         };
     }
 
-    namespace ChannelBW125kHz
-    {
-        enum ChannelBW125kHz : uint8_t
-        {
+    namespace ChannelBW125kHz {
+        enum ChannelBW125kHz : uint8_t {
             CH01_920_6_MHZ = 1,
             CH02_920_8_MHZ,
             CH03_921_0_MHZ,
@@ -213,10 +192,8 @@ namespace es920 {
         };
     }
 
-    namespace ChennelBW250kHz
-    {
-        enum ChannelBW250kHz : uint8_t
-        {
+    namespace ChennelBW250kHz {
+        enum ChannelBW250kHz : uint8_t {
             CH01_920_7_MHZ = 1,
             CH02_921_1_MHZ,
             CH03_921_5_MHZ,
@@ -227,10 +204,8 @@ namespace es920 {
         };
     }
 
-    namespace ChannelBW500kHz
-    {
-        enum ChannelBW500kHz : uint8_t
-        {
+    namespace ChannelBW500kHz {
+        enum ChannelBW500kHz : uint8_t {
             CH01_920_8_MHZ = 1,
             CH02_921_4_MHZ,
             CH03_922_0_MHZ,
@@ -239,11 +214,10 @@ namespace es920 {
         };
     }
 
+    constexpr uint8_t PAYLOAD_SIZE_ES920 {225};
+    constexpr uint8_t PAYLOAD_SIZE_ES920LR {50};
 
-    constexpr uint8_t PAYLOAD_SIZE_ES920 { 225 };
-    constexpr uint8_t PAYLOAD_SIZE_ES920LR { 50 };
+}  // namespace es920
+}  // namespace arduino
 
-} // namespace es920
-} // namespace arduino
-
-#endif // ARDUINO_ES920_CONSTANTS_H
+#endif  // ARDUINO_ES920_CONSTANTS_H

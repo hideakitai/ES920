@@ -8,7 +8,7 @@
 namespace arduino {
 namespace es920 {
 
-#if ARX_HAVE_LIBSTDCPLUSPLUS >= 201103L // Have libstdc++11
+#if ARX_HAVE_LIBSTDCPLUSPLUS >= 201103L  // Have libstdc++11
     using Buffer = std::deque<StringType>;
 #else
     using Buffer = arx::deque<StringType, 4>;
@@ -17,8 +17,7 @@ namespace es920 {
     using AsciiCallbackType = std::function<void(const StringType& str)>;
 
     template <uint8_t PAYLOAD_SIZE>
-    class AsciiParser
-    {
+    class AsciiParser {
         const StringType line_ok {"OK"};
         const StringType line_ng {"NG "};
         const StringType line_ver {"VER"};
@@ -55,7 +54,7 @@ namespace es920 {
         int16_t remote_rssi;
         StringType remote_panid;
         StringType remote_ownid;
-        StringType remote_hopid; // ES920 only
+        StringType remote_hopid;  // ES920 only
         Mode mode;
 
         Buffer payloads;
@@ -63,49 +62,46 @@ namespace es920 {
         AsciiCallbackType asc_callback;
 
     public:
-
-        void feed(const uint8_t* data, const uint8_t size, const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true)
-        {
+        void feed(const uint8_t* data, const uint8_t size, const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true) {
             for (uint8_t i = 0; i < size; ++i) feed(data[i], b_rssi, b_rcvid, b_exec_cb);
         }
 
-        void feed(const char c, const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true)
-        {
-            if (c == '\n')
-            {
-                if (buffer[ES920_STRING_SIZE(buffer) - 1] != '\r')
-                {
+        void feed(const char c, const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true) {
+            if (c == '\n') {
+                if (buffer[ES920_STRING_SIZE(buffer) - 1] != '\r') {
                     LOG_ERROR("packet format is wrong, reset buffer : ", buffer);
-                }
-                else
-                {
-                    ES920_STRING_POP_BACK(buffer); // remove '\r'
+                } else {
+                    ES920_STRING_POP_BACK(buffer);  // remove '\r'
                     parseReply(buffer, b_rssi, b_rcvid);
 
-                    while (available() && b_exec_cb)
-                    {
+                    while (available() && b_exec_cb) {
                         callback();
                         pop();
                     }
                 }
                 ES920_STRING_CLEAR(buffer);
-            }
-            else
+            } else
                 buffer += c;
         }
 
         bool isParsing() const { return ES920_STRING_SIZE(buffer) != 0; }
         size_t available() const { return payloads.size(); }
-        const StringType& data() const { static StringType s; return payloads.empty() ? s : payloads.front(); }
+        const StringType& data() const {
+            static StringType s;
+            return payloads.empty() ? s : payloads.front();
+        }
         size_t size() const { return payloads.empty() ? 0 : ES920_STRING_SIZE(payloads.front()); }
 
-        void pop() { if (!payloads.empty()) payloads.pop_front(); }
+        void pop() {
+            if (!payloads.empty()) payloads.pop_front();
+        }
 
         void subscribe(const AsciiCallbackType& cb) { asc_callback = cb; }
-        void callback() { if (asc_callback && available()) asc_callback(data()); }
+        void callback() {
+            if (asc_callback && available()) asc_callback(data());
+        }
 
-        void clear()
-        {
+        void clear() {
             b_reply = b_error = b_version = b_wakeup = b_reset = false;
             payloads.clear();
             ES920_STRING_CLEAR(buffer);
@@ -130,67 +126,56 @@ namespace es920 {
         size_t errorCount() const { return error_count; }
         const StringType& versionCode() const { return version_str; }
 
-        void setBaudrate(const Baudrate b)
-        {
-            if      (b == Baudrate::BD_9600)   line_reset = line_reset_9600;
-            else if (b == Baudrate::BD_19200)  line_reset = line_reset_19200;
-            else if (b == Baudrate::BD_38400)  line_reset = line_reset_38400;
-            else if (b == Baudrate::BD_57600)  line_reset = line_reset_57600;
-            else if (b == Baudrate::BD_115200) line_reset = line_reset_115200;
-            else if (b == Baudrate::BD_230400) line_reset = line_reset_230400;
+        void setBaudrate(const Baudrate b) {
+            if (b == Baudrate::BD_9600)
+                line_reset = line_reset_9600;
+            else if (b == Baudrate::BD_19200)
+                line_reset = line_reset_19200;
+            else if (b == Baudrate::BD_38400)
+                line_reset = line_reset_38400;
+            else if (b == Baudrate::BD_57600)
+                line_reset = line_reset_57600;
+            else if (b == Baudrate::BD_115200)
+                line_reset = line_reset_115200;
+            else if (b == Baudrate::BD_230400)
+                line_reset = line_reset_230400;
         }
 
-
     private:
-
-        void parseReply(const StringType& str, const bool b_rssi, const bool b_rcvid)
-        {
-            if (str == line_ok)
-            {
+        void parseReply(const StringType& str, const bool b_rssi, const bool b_rcvid) {
+            if (str == line_ok) {
                 b_reply = true;
                 b_error = false;
                 error_code = "000";
                 LOG_VERBOSE("received OK");
-            }
-            else if (
+            } else if (
                 (ES920_STRING_SIZE(str) == 6) &&
-                (ES920_STRING_SUBSTR(str, 0, 3) == line_ng)
-            ){
+                (ES920_STRING_SUBSTR(str, 0, 3) == line_ng)) {
                 b_reply = true;
                 b_error = true;
                 error_code = ES920_STRING_SUBSTR(str, 3, 3);
                 error_count++;
                 LOG_ERROR("received error :", error_code, ", error count =", error_count);
-            }
-            else if (
+            } else if (
                 (ES920_STRING_SIZE(str) == 8) &&
-                (ES920_STRING_SUBSTR(str, 0, 3) == line_ver)
-            ){
+                (ES920_STRING_SUBSTR(str, 0, 3) == line_ver)) {
                 b_reply = true;
                 b_version = true;
                 version_str = ES920_STRING_SUBSTR(str, 3, 4);
                 LOG_VERBOSE("version message is detected!!! ver =", version_str);
-            }
-            else if (ES920_STRING_SUBSTR(str, 0, 3) == line_reset)
-            {
+            } else if (ES920_STRING_SUBSTR(str, 0, 3) == line_reset) {
                 b_reset = true;
                 b_wakeup = false;
                 LOG_VERBOSE("reset message is detected!!!");
-            }
-            else if (str == line_config)
-            {
+            } else if (str == line_config) {
                 b_wakeup = true;
                 mode = Mode::CONFIG;
                 LOG_VERBOSE("wakeup message (config) is detected!!! mode =", (int)mode);
-            }
-            else if (str == line_operation)
-            {
+            } else if (str == line_operation) {
                 b_wakeup = true;
                 mode = Mode::OPERATION;
                 LOG_VERBOSE("wakeup message (operation) is detected!!! mode =", (int)mode);
-            }
-            else
-            {
+            } else {
                 if (PAYLOAD_SIZE == PAYLOAD_SIZE_ES920)
                     parsePayloadES920(str, b_rssi, b_rcvid);
                 else
@@ -198,18 +183,14 @@ namespace es920 {
             }
         }
 
-        void parsePayloadES920(const StringType& str, const bool b_rssi, const bool b_rcvid)
-        {
-            if (b_rssi || b_rcvid)
-            {
+        void parsePayloadES920(const StringType& str, const bool b_rssi, const bool b_rcvid) {
+            if (b_rssi || b_rcvid) {
                 uint8_t data_head = 0;
-                if (b_rssi)
-                {
+                if (b_rssi) {
                     remote_rssi = -(strtol(ES920_STRING_SUBSTR(buffer, data_head, 2).c_str(), 0, 16)) / 2;
                     data_head += 2;
                 }
-                if (b_rcvid)
-                {
+                if (b_rcvid) {
                     remote_panid = ES920_STRING_SUBSTR(str, data_head + 0, 4);
                     remote_hopid = ES920_STRING_SUBSTR(str, data_head + 4, 4);
                     remote_ownid = ES920_STRING_SUBSTR(str, data_head + 8, 4);
@@ -219,26 +200,20 @@ namespace es920 {
                     LOG_VERBOSE("got remote ownid :", remote_ownid);
                 }
                 payloads.push_back(ES920_STRING_SUBSTR(str, data_head, ES920_STRING_SIZE(str) - data_head));
-            }
-            else
-            {
+            } else {
                 payloads.push_back(str);
             }
         }
 
-        void parsePayloadES920LR(const StringType& str, const bool b_rssi, const bool b_rcvid)
-        {
-            if (b_rssi || b_rcvid)
-            {
+        void parsePayloadES920LR(const StringType& str, const bool b_rssi, const bool b_rcvid) {
+            if (b_rssi || b_rcvid) {
                 uint8_t data_head = 0;
-                if (b_rssi)
-                {
+                if (b_rssi) {
                     remote_rssi = ES920_STRING_TO_INT(ES920_STRING_SUBSTR(str, data_head, 4));
                     data_head += 4;
                     LOG_VERBOSE("got rssi :", remote_rssi);
                 }
-                if (b_rcvid)
-                {
+                if (b_rcvid) {
                     remote_panid = ES920_STRING_SUBSTR(str, data_head, 4);
                     remote_ownid = ES920_STRING_SUBSTR(str, data_head + 4, 4);
                     data_head += 8;
@@ -246,15 +221,13 @@ namespace es920 {
                     LOG_VERBOSE("got remote ownid :", remote_ownid);
                 }
                 payloads.push_back(ES920_STRING_SUBSTR(str, data_head, ES920_STRING_SIZE(str) - data_head));
-            }
-            else
-            {
+            } else {
                 payloads.push_back(str);
             }
         }
     };
 
-} // namespace es920
-} // namespace arduino
+}  // namespace es920
+}  // namespace arduino
 
-#endif // ARDUINO_ES920_ASCII_PARSER_H
+#endif  // ARDUINO_ES920_ASCII_PARSER_H

@@ -10,87 +10,74 @@ namespace arduino {
 namespace es920 {
 
     template <typename Stream, uint8_t PAYLOAD_SIZE>
-    class Parser
-    {
+    class Parser {
         Stream* stream;
         AsciiParser<PAYLOAD_SIZE> asc_parser;
         BinaryParser<PAYLOAD_SIZE> bin_parser;
 
     public:
-
-        void attach(const Stream& s, const Baudrate b)
-        {
+        void attach(const Stream& s, const Baudrate b) {
             stream = (Stream*)&s;
             setBaudrate(b);
         }
 
-        void subscribeAscii(const AsciiCallbackType& cb)
-        {
+        void subscribeAscii(const AsciiCallbackType& cb) {
             asc_parser.subscribe(cb);
         }
 
-        void subscribeBinary(const uint8_t id, const BinaryCallbackType& cb)
-        {
+        void subscribeBinary(const uint8_t id, const BinaryCallbackType& cb) {
             bin_parser.subscribe(id, cb);
         }
 
-        void subscribeBinary(const BinaryAlwaysCallbackType& cb)
-        {
+        void subscribeBinary(const BinaryAlwaysCallbackType& cb) {
             bin_parser.subscribe(cb);
         }
 
-        void clear()
-        {
+        void clear() {
             asc_parser.clear();
             bin_parser.clear();
         }
 
-        size_t parseAscii(const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true)
-        {
-            while (stream->available())
-            {
+        size_t parseAscii(const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true) {
+            while (stream->available()) {
                 uint8_t d = ES920_READ_BYTE();
                 asc_parser.feed(d, b_rssi, b_rcvid, b_exec_cb);
             }
             return availableAscii();
         }
 
-        size_t parseBinary(const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true)
-        {
-            while (stream->available())
-            {
+        size_t parseBinary(const bool b_rssi, const bool b_rcvid, const bool b_exec_cb = true) {
+            while (stream->available()) {
                 uint8_t d = ES920_READ_BYTE();
                 bin_parser.feed(d, b_rssi, b_rcvid, b_exec_cb);
             }
             return availableBinary();
         }
 
-        void callbackAscii()
-        {
+        void callbackAscii() {
             asc_parser.callback();
         }
 
-        void callbackBinary()
-        {
+        void callbackBinary() {
             bin_parser.callback();
         }
 
-        uint8_t indexAscii() const { return 0; } // TODO:
+        uint8_t indexAscii() const { return 0; }  // TODO:
         uint8_t indexBinary() const { return bin_parser.index(); }
 
-        uint8_t indexBackAscii() const { return 0; } // TODO:
+        uint8_t indexBackAscii() const { return 0; }  // TODO:
         uint8_t indexBackBinary() const { return bin_parser.index_back(); }
 
         const StringType& dataAscii() const { return asc_parser.data(); }
         const uint8_t* dataBinary() const { return bin_parser.data(); }
 
-        const StringType& dataBackAscii() const { return StringType(""); } // TODO:
+        const StringType& dataBackAscii() const { return StringType(""); }  // TODO:
         const uint8_t* dataBackBinary() const { return bin_parser.data_back(); }
 
         size_t sizeAscii() const { return asc_parser.size(); }
         size_t sizeBinary() const { return bin_parser.size(); }
 
-        size_t sizeBackAscii() const { return 0; } // TODO:
+        size_t sizeBackAscii() const { return 0; }  // TODO:
         size_t sizeBackBinary() const { return bin_parser.size_back(); }
 
         size_t availableAscii() const { return asc_parser.available(); }
@@ -100,7 +87,10 @@ namespace es920 {
         void popAscii() { asc_parser.pop(); }
 
         void popBackBinary() { bin_parser.pop_back(); }
-        void popBackAscii() { LOG_WARNING("subghz pop_back in Ascii is not implemented");; } // TODO:
+        void popBackAscii() {
+            LOG_WARNING("subghz pop_back in Ascii is not implemented");
+            ;
+        }  // TODO:
 
         bool hasReplyAscii() { return asc_parser.hasReply(); }
         bool hasReplyBinary() { return bin_parser.hasReply(); }
@@ -127,62 +117,49 @@ namespace es920 {
         const StringType& remoteHopidAscii() const { return asc_parser.remoteHopid(); }
         const StringType& remoteHopidBinary() const { return bin_parser.remoteHopid(); }
 
-
-        bool detectReset(const uint32_t timeout_ms)
-        {
+        bool detectReset(const uint32_t timeout_ms) {
             waitResponseAscii(timeout_ms);
             return asc_parser.hasReset();
         }
 
-        Mode detectMode(const uint32_t timeout_ms)
-        {
+        Mode detectMode(const uint32_t timeout_ms) {
             LOG_VERBOSE("mode detection start: wait for mode detection...");
             waitResponseAscii(timeout_ms);
 
-            if (asc_parser.hasWakeup())
-            {
+            if (asc_parser.hasWakeup()) {
                 LOG_VERBOSE("wakeup message has come!");
                 LOG_VERBOSE("detected mode is: configuration");
                 return asc_parser.detectedMode();
-            }
-            else
-            {
+            } else {
                 LOG_VERBOSE("no wakeup message");
                 LOG_VERBOSE("detected mode is: (maybe) operation mode");
                 return Mode::OPERATION;
             }
         }
 
-        bool detectReplyAscii(const uint32_t timeout_ms)
-        {
+        bool detectReplyAscii(const uint32_t timeout_ms) {
             return waitResponseAscii(timeout_ms);
         }
 
-        bool detectReplyBinary(const uint32_t timeout_ms)
-        {
+        bool detectReplyBinary(const uint32_t timeout_ms) {
             return waitResponseBinary(timeout_ms);
         }
 
-        const StringType& detectVersion(const uint32_t timeout_ms)
-        {
+        const StringType& detectVersion(const uint32_t timeout_ms) {
             waitResponseAscii(timeout_ms);
             if (asc_parser.hasVersion())
                 return asc_parser.versionCode();
             return asc_parser.errorCode();
         }
 
-        void setBaudrate(const Baudrate b)
-        {
+        void setBaudrate(const Baudrate b) {
             asc_parser.setBaudrate(b);
         }
 
     private:
-
-        bool waitResponseAscii(const uint32_t timeout_ms)
-        {
+        bool waitResponseAscii(const uint32_t timeout_ms) {
             uint32_t start_ms = ELAPSED_TIME_MS();
-            while (ELAPSED_TIME_MS() < start_ms + timeout_ms)
-            {
+            while (ELAPSED_TIME_MS() < start_ms + timeout_ms) {
                 parseAscii(false, false);
                 if (hasReplyAscii()) return true;
             }
@@ -190,11 +167,9 @@ namespace es920 {
             return false;
         }
 
-        bool waitResponseBinary(const uint32_t timeout_ms)
-        {
+        bool waitResponseBinary(const uint32_t timeout_ms) {
             uint32_t start_ms = ELAPSED_TIME_MS();
-            while (ELAPSED_TIME_MS() < start_ms + timeout_ms)
-            {
+            while (ELAPSED_TIME_MS() < start_ms + timeout_ms) {
                 parseBinary(false, false);
                 if (hasReplyBinary()) return true;
             }
@@ -234,10 +209,9 @@ namespace es920 {
         //     float lag_recv_serial = lag_serial_send; // TODO: rssi, rcvid, etc.
         //     return uint32_t(lag_serial_send + LAG_USEC_SEND_ENCODE + LAG_USEC_SEND_SEND + lag_send_air + LAG_USEC_RECV_DECODE + lag_recv_serial);
         // }
-
     };
 
-} // namespace es920
-} // namespace arduino
+}  // namespace es920
+}  // namespace arduino
 
-#endif // ARDUINO_ES920_PARSER_H
+#endif  // ARDUINO_ES920_PARSER_H

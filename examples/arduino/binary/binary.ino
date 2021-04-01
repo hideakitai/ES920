@@ -7,8 +7,7 @@ ES920::Config config;
 ES920::ES920<PIN_RST> subghz;
 // ES920::ES920LR<PIN_RST> subghz;
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
     delay(2000);
 
@@ -50,8 +49,7 @@ void setup()
 
     // set binary format callback and data index
     // you can add several callbacks depending on index
-    subghz.subscribe(0x01, [](const uint8_t* data, const size_t size)
-    {
+    subghz.subscribe(0x01, [](const uint8_t* data, const size_t size) {
         // PRINTLN is utility for ES920 library, see below for detail
         // https://github.com/hideakitai/DebugLog
         PRINTLN("subghz data received! size =", size);
@@ -75,14 +73,12 @@ void setup()
     Serial.println("start operation mode");
 }
 
-void loop()
-{
-    subghz.parse(); // must be called to trigger callback
+void loop() {
+    subghz.parse();  // must be called to trigger callback
 
     // send data in one seconds
     static uint32_t prev_ms = millis();
-    if (millis() > prev_ms + 1000)
-    {
+    if (millis() > prev_ms + 1000) {
         uint8_t data[10];
         data[0] = (uint8_t)((prev_ms / 1000) % 255);
         for (uint8_t i = 1; i < 10; ++i) data[i] = i;
@@ -98,6 +94,4 @@ void loop()
 
         prev_ms = millis();
     }
-
 }
-

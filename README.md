@@ -24,8 +24,7 @@ ES920::ES920<PIN_RST> subghz;
 // or
 ES920::ES920LR<PIN_RST> subghz;
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
     delay(2000);
 
@@ -47,8 +46,7 @@ void setup()
 
     // set ascii format callback
     // you can add only one callback
-    subghz.subscribe([](const String& str)
-    {
+    subghz.subscribe([](const String& str) {
         // PRINTLN is utility for ES920 library, see below for detail
         // https://github.com/hideakitai/DebugLog
         PRINTLN("subghz data received! size =", str.length());
@@ -69,8 +67,7 @@ void setup()
     Serial.println("start operation mode");
 }
 
-void loop()
-{
+void loop() {
     subghz.parse(); // must be called to trigger callback
 
     // send data in one seconds
@@ -96,8 +93,7 @@ ES920::ES920<PIN_RST> subghz;
 // or
 ES920::ES920LR<PIN_RST> subghz;
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
     delay(2000);
 
@@ -119,8 +115,7 @@ void setup()
 
     // set binary format callback and data index
     // you can add several callbacks depending on index
-    subghz.subscribe(0x01, [](const uint8_t* data, const size_t size)
-    {
+    subghz.subscribe(0x01, [](const uint8_t* data, const size_t size) {
         // PRINTLN is utility for ES920 library, see below for detail
         // https://github.com/hideakitai/DebugLog
         PRINTLN("subghz data received! size =", size);
@@ -144,8 +139,7 @@ void setup()
     Serial.println("start operation mode");
 }
 
-void loop()
-{
+void loop() {
     subghz.parse(); // must be called to trigger callback
 
     uint8_t data[10];
@@ -202,8 +196,7 @@ config.senddata = "";
 ### Configuration Struct and Initial Values
 
 ```C++
-struct Config
-{
+struct Config {
     // protocol info (required for parse)
     Baudrate baudrate {Baudrate::BD_115200};
     Mode operation {Mode::CONFIG};
@@ -387,26 +380,22 @@ SF spreadingfactor() const;
 ```C++
 // common
 
-enum class Mode : uint8_t
-{
+enum class Mode : uint8_t {
     CONFIG = 1,
     OPERATION
 };
 
-enum class Node : uint8_t
-{
+enum class Node : uint8_t {
     COORDINATOR = 1,
     ENDDEVICE
 };
 
-enum class TransMode : uint8_t
-{
+enum class TransMode : uint8_t {
     PAYLOAD = 1,
     FRAME
 };
 
-enum class Baudrate : uint8_t
-{
+enum class Baudrate : uint8_t {
     BD_9600 = 1,
     BD_19200,
     BD_38400,
@@ -415,15 +404,13 @@ enum class Baudrate : uint8_t
     BD_230400
 };
 
-enum class SleepMode : uint8_t
-{
+enum class SleepMode : uint8_t {
     NO_SLEEP= 1,
     TIMER_WAKEUP,
     INT_WAKEUP
 };
 
-enum class Format : uint8_t
-{
+enum class Format : uint8_t {
     ASCII = 1,
     BINARY
 };
@@ -431,16 +418,13 @@ enum class Format : uint8_t
 
 // only for ES920
 
-enum class Rate : uint8_t
-{
+enum class Rate : uint8_t {
     RATE_50KBPS = 1,
     RATE_100KBPS
 };
 
-namespace ChannelRate50kbps
-{
-    enum ChannelRate50kbps : uint8_t
-    {
+namespace ChannelRate50kbps {
+    enum ChannelRate50kbps : uint8_t {
         CH01_920_6_MHZ = 1,
         CH02_920_8_MHZ,
         CH03_921_0_MHZ,
@@ -482,10 +466,8 @@ namespace ChannelRate50kbps
     };
 }
 
-namespace ChannelRate100kbps
-{
-    enum ChannelRate100kbps : uint8_t
-    {
+namespace ChannelRate100kbps {
+    enum ChannelRate100kbps : uint8_t {
         CH01_920_7_MHZ = 1,
         CH02_921_1_MHZ,
         CH03_921_5_MHZ,
@@ -511,16 +493,14 @@ namespace ChannelRate100kbps
 
 // only for ES920LR
 
-enum class BW : uint8_t
-{
+enum class BW : uint8_t {
     BW_62_5_KHZ = 3,
     BW_125_KHZ, // default
     BW_250_KHZ,
     BW_500_KHZ
 };
 
-enum class SF : uint8_t
-{
+enum class SF : uint8_t {
     SF_7 = 7, // default
     SF_8,
     SF_9,
@@ -529,10 +509,8 @@ enum class SF : uint8_t
     SF_12
 };
 
-namespace ChannelBW62_5kHz
-{
-    enum ChannelBW62_5kHz : uint8_t
-    {
+namespace ChannelBW62_5kHz {
+    enum ChannelBW62_5kHz : uint8_t {
         CH01_920_6_MHZ = 1,
         CH02_920_8_MHZ,
         CH03_921_0_MHZ,
@@ -551,10 +529,8 @@ namespace ChannelBW62_5kHz
     };
 }
 
-namespace ChannelBW125kHz
-{
-    enum ChannelBW125kHz : uint8_t
-    {
+namespace ChannelBW125kHz {
+    enum ChannelBW125kHz : uint8_t {
         CH01_920_6_MHZ = 1,
         CH02_920_8_MHZ,
         CH03_921_0_MHZ,
@@ -573,10 +549,8 @@ namespace ChannelBW125kHz
     };
 }
 
-namespace ChennelBW250kHz
-{
-    enum ChannelBW250kHz : uint8_t
-    {
+namespace ChennelBW250kHz {
+    enum ChannelBW250kHz : uint8_t {
         CH01_920_7_MHZ = 1,
         CH02_921_1_MHZ,
         CH03_921_5_MHZ,
@@ -587,10 +561,8 @@ namespace ChennelBW250kHz
     };
 }
 
-namespace ChannelBW500kHz
-{
-    enum ChannelBW500kHz : uint8_t
-    {
+namespace ChannelBW500kHz {
+    enum ChannelBW500kHz : uint8_t {
         CH01_920_8_MHZ = 1,
         CH02_921_4_MHZ,
         CH03_922_0_MHZ,
