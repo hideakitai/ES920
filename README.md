@@ -245,6 +245,14 @@ struct Config {
 ![](resources/startup_sequence.jpg)
 
 
+## Enable Debug Outputs
+
+If you define following macro before including `ES920.h`, debug outputs will be enabled (default disabled).
+
+```C++
+#define ES920_DEBUGLOG_ENABLE
+```
+
 ## APIs
 
 ### ES920/ES920LR Common
