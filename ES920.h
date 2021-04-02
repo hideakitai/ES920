@@ -5,7 +5,7 @@
 #define PACKETIZER_USE_INDEX_AS_DEFAULT
 #define PACKETIZER_USE_CRC_AS_DEFAULT
 
-#include "ES920/util/ArxContainer/ArxContainer.h"
+#include "ES920/util/Packetizer/Packetizer.h"
 #include "ES920/util/DebugLog/DebugLog.h"
 #include "ES920/util/ArxStringUtils/ArxStringUtils.h"
 
@@ -106,10 +106,12 @@ namespace es920 {
         }
 
         template <typename SerialType>
-        bool begin(SerialType& s, const Config& cfg,
-                   const bool b_config_check = true,
-                   const bool b_force_config = true,
-                   const bool b_verbose = false) {
+        bool begin(
+            SerialType& s,
+            const Config& cfg,
+            const bool b_config_check = true,
+            const bool b_force_config = true,
+            const bool b_verbose = false) {
             attach(s, cfg, b_verbose);
 
 #ifdef ARDUINO
