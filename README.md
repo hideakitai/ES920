@@ -583,7 +583,7 @@ namespace ChannelBW500kHz {
 ## Embedded Libraries
 
 - [ArxStringUtils v0.2.9](https://github.com/hideakitai/ArxStringUtils)
-- [DebugLog v0.4.2](https://github.com/hideakitai/DebugLog)
+- [DebugLog v0.6.1](https://github.com/hideakitai/DebugLog)
 - [Packetizer v0.6.2](https://github.com/hideakitai/Packetizer)
 - [TeensyDirtySTLErrorSolution v0.1.0](https://github.com/hideakitai/TeensyDirtySTLErrorSolution)
 

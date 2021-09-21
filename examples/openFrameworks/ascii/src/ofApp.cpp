@@ -14,7 +14,7 @@ void ofApp::setup(){
 
     serial.listDevices();
     std::cout << "start config" << std::endl;
-    LOG_SET_LEVEL(DebugLogLevel::VERBOSE);
+    LOG_SET_LEVEL(DebugLogLevel::INFO);
 
     // ES920 only
     config.rate = ES920::Rate::RATE_100KBPS;
@@ -147,6 +147,6 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }

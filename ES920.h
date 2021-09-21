@@ -133,7 +133,7 @@ namespace es920 {
                 LOG_ERROR("cannot connect to module! or baudrate is different!");
 
                 if (baudrate() != Baudrate::BD_115200) {
-                    LOG_VERBOSE("retry with default 115200 baud");
+                    LOG_INFO("retry with default 115200 baud");
                     Config c = cfg;
                     c.baudrate = Baudrate::BD_115200;
                     attach(s, c, b_verbose);
@@ -159,7 +159,7 @@ namespace es920 {
                 // timeout after 4sec for auto reset (if reset pin is availble)
                 // timeout after 30sec for manual reset (if reset pin is not asigned)
                 if (autoProcedureFromAnywhereToConfigMode(10000)) {
-                    LOG_VERBOSE("successfully entered to configuration mode!");
+                    LOG_INFO("successfully entered to configuration mode!");
                     bool b_success = config(s, cfg);
                     if (!b_success) LOG_ERROR("some configuration setting has write error!");
                     return b_success;
@@ -200,13 +200,13 @@ namespace es920 {
             success &= rcvid(configs.rcvid);  // add remote panid & ownid to data
 
             // finally change baudrate
-            LOG_VERBOSE("change to baudrate", configToBaudrate(configs.baudrate));
+            LOG_INFO("change to baudrate", configToBaudrate(configs.baudrate));
             success &= baudrate(configs.baudrate);  // baudrate will be changed right after this command
             wait(100);
             changeBaudRate(s);
             wait(100);
-            LOG_VERBOSE("changed baudrate to", configToBaudrate(configs.baudrate));
-            LOG_VERBOSE("configuration done, change to operation mode");
+            LOG_INFO("changed baudrate to", configToBaudrate(configs.baudrate));
+            LOG_INFO("configuration done, change to operation mode");
 
             // change operation mode and save configuration and restart
             success &= autoProcedureSaveAndRestart(10000);
@@ -220,7 +220,7 @@ namespace es920 {
 
         bool send(const StringType& str, const uint32_t timeout_ms = 0) {
             if (configs.transmode != TransMode::PAYLOAD) {
-                LOG_WARNING("TransMode is not matched. Please set PAN ID & OWN ID");
+                LOG_WARN("TransMode is not matched. Please set PAN ID & OWN ID");
                 return false;
             }
             if (!sender.sendPayload(str)) return false;
@@ -233,7 +233,7 @@ namespace es920 {
 
         bool send(const uint8_t index, const uint8_t* data, const uint8_t size, const uint32_t timeout_ms = 0) {
             if (configs.transmode != TransMode::PAYLOAD) {
-                LOG_WARNING("TransMode is not matched. Please set PAN ID & OWN ID");
+                LOG_WARN("TransMode is not matched. Please set PAN ID & OWN ID");
                 return false;
             }
             if (!sender.sendPayload(data, size, index)) return false;
@@ -242,7 +242,7 @@ namespace es920 {
 
         bool send(const uint16_t pan, const uint16_t own, const StringType& str, const uint32_t timeout_ms = 0) {
             if (configs.transmode != TransMode::FRAME) {
-                LOG_WARNING("TransMode is not matched. Please remove PAN ID & OWN ID");
+                LOG_WARN("TransMode is not matched. Please remove PAN ID & OWN ID");
                 return false;
             }
             if (!sender.sendFrame(pan, own, str)) return false;
@@ -255,7 +255,7 @@ namespace es920 {
 
         bool send(const uint16_t pan, const uint16_t own, const uint8_t index, const uint8_t* data, const uint8_t size, const uint32_t timeout_ms = 0) {
             if (configs.transmode != TransMode::FRAME) {
-                LOG_WARNING("TransMode is not matched. Please remove PAN ID & OWN ID");
+                LOG_WARN("TransMode is not matched. Please remove PAN ID & OWN ID");
                 return false;
             }
             if (!sender.sendFrame(pan, own, data, size, index)) return false;
@@ -440,7 +440,7 @@ namespace es920 {
 
         bool panid(const uint16_t addr) {
             if ((addr < 0x0001) || (addr > 0xFFFE)) {
-                LOG_WARNING("PAN ID is out of range : ", arx::str::to_hex(addr));
+                LOG_WARN("PAN ID is out of range : ", arx::str::to_hex(addr));
                 return false;
             }
             configurator.panid(addr);
@@ -454,12 +454,12 @@ namespace es920 {
         bool ownid(const uint16_t addr) {
             if (configs.node == Node::COORDINATOR) {
                 if (addr != 0) {
-                    LOG_WARNING("coordinator's ownid must be 0");
+                    LOG_WARN("coordinator's ownid must be 0");
                     return false;
                 }
             } else {
                 if ((addr < 0x0001) || (addr > 0xFFFE)) {
-                    LOG_WARNING("OWN ID is out of range : ", arx::str::to_hex(addr));
+                    LOG_WARN("OWN ID is out of range : ", arx::str::to_hex(addr));
                     return false;
                 }
             }
@@ -495,7 +495,7 @@ namespace es920 {
 
         bool retry(const uint8_t i) {
             if (i > 10) {
-                LOG_WARNING("too many retry : ", i);
+                LOG_WARN("too many retry : ", i);
                 return false;
             }
             configurator.retry(i);
@@ -569,7 +569,7 @@ namespace es920 {
 
         bool power(const int8_t pwr) {
             if ((pwr < -4) || (pwr > 13)) {
-                LOG_WARNING("power value is out of range : ", pwr);
+                LOG_WARN("power value is out of range : ", pwr);
                 return false;
             }
             configurator.power(pwr);
@@ -620,7 +620,7 @@ namespace es920 {
 
         bool senddata(const StringType& str) {
             if (ES920_STRING_SIZE(str) > PAYLOAD_SIZE_ES920LR) {
-                LOG_WARNING("too long data, must be under : ", ES920_STRING_SIZE(str));
+                LOG_WARN("too long data, must be under : ", ES920_STRING_SIZE(str));
                 return false;
             }
             configurator.senddata(str);
@@ -661,7 +661,7 @@ namespace es920 {
             while (stream->available()) ES920_READ_BYTE();
             parser.clear();
             reset(false);
-            LOG_VERBOSE("reset signal trigger done");
+            LOG_INFO("reset signal trigger done");
 #else
             stream->flush();
             while (stream->available()) ES920_READ_BYTE();
@@ -672,9 +672,9 @@ namespace es920 {
         }
 
         // for debug
-        void verbose(const bool b) { LOG_SET_LEVEL(b ? DebugLogLevel::VERBOSE : DebugLogLevel::ERRORS); }
+        void verbose(const bool b) { LOG_SET_LEVEL(b ? DebugLogLevel::INFO : DebugLogLevel::ERROR); }
 #ifndef NDEBUG
-        bool verbose() const { return LOG_GET_LEVEL() == DebugLogLevel::VERBOSE; }
+        bool verbose() const { return LOG_GET_LEVEL() == DebugLogLevel::INFO; }
 #endif
 
     private:
@@ -714,18 +714,18 @@ namespace es920 {
 
                 // check curent mode
                 Mode m = detectMode();
-                LOG_VERBOSE("detected mode is ", (int)m);
+                LOG_INFO("detected mode is ", (int)m);
 
                 // if current mode is Mode::Config, select Processor Mode
                 if (m == Mode::CONFIG) {
-                    LOG_VERBOSE("enter to Processor Mode");
+                    LOG_INFO("enter to Processor Mode");
                     selectProcessorMode();
-                    LOG_VERBOSE("mode change done, current mode is ", (int)m);
+                    LOG_INFO("mode change done, current mode is ", (int)m);
                     return true;
                 }
                 // if current mode is Mode::Operation, trigger to enter config mode and reset again
                 else {
-                    LOG_VERBOSE("maybe operation mode, reboot to enter config mode");
+                    LOG_INFO("maybe operation mode, reboot to enter config mode");
                     fromOperationToConfigTrigger();
                 }
             }
@@ -748,23 +748,23 @@ namespace es920 {
                 reset();
 
                 if (detectReset()) {
-                    LOG_VERBOSE("reset detected !");
+                    LOG_INFO("reset detected !");
                     break;
                 } else {
                     LOG_ERROR("reset has not been detected... try again");
                 }
             }
 
-            LOG_VERBOSE("current mode is ", (int)operation());
+            LOG_INFO("current mode is ", (int)operation());
 
             auto m = detectMode();
             if (m == configs.operation) {
-                LOG_VERBOSE("operation mode change success!");
+                LOG_INFO("operation mode change success!");
 
                 if (m == Mode::OPERATION)
-                    LOG_VERBOSE("start operation");
+                    LOG_INFO("start operation");
                 else
-                    LOG_VERBOSE("start config mode");
+                    LOG_INFO("start config mode");
                 return true;
             } else {
                 LOG_ERROR("operation mode is not expected!");
@@ -790,14 +790,14 @@ namespace es920 {
         void fromOperationToConfigTrigger() {
             StringType cmd = "config\r\n";
             ES920_WRITE_BYTES(cmd.c_str(), ES920_STRING_SIZE(cmd));
-            LOG_VERBOSE("from operation to config : ", cmd);
+            LOG_INFO("from operation to config : ", cmd);
             wait(wait_config_trigger_ms);
         }
 
 #ifdef ARDUINO
         void reset(const bool b) {
             if (isResetPinSelected()) {
-                LOG_VERBOSE("reset module ", !b);
+                LOG_INFO("reset module ", !b);
                 digitalWrite(PIN_RST, !b);
             }
         }
@@ -823,7 +823,7 @@ namespace es920 {
     public:
         bool hopcount(const uint8_t i) {
             if ((i < 1) || (i > 4)) {
-                LOG_WARNING("hop count is out of range : ", i);
+                LOG_WARN("hop count is out of range : ", i);
                 return false;
             }
             this->configurator.hopcount(i);
@@ -832,7 +832,7 @@ namespace es920 {
 
         bool endid(const uint16_t addr) {
             if (addr > 0xFFFE) {
-                LOG_WARNING("END ID is out of range : ", arx::str::to_hex(addr));
+                LOG_WARN("END ID is out of range : ", arx::str::to_hex(addr));
                 return false;
             }
             this->configurator.endid(addr);
@@ -841,7 +841,7 @@ namespace es920 {
 
         bool route1(const uint16_t addr) {
             if ((addr < 0x0001) || (addr > 0xFFFE)) {
-                LOG_WARNING("route1 is out of range : ", arx::str::to_hex(addr));
+                LOG_WARN("route1 is out of range : ", arx::str::to_hex(addr));
                 return false;
             }
             this->configurator.route1(addr);
@@ -850,7 +850,7 @@ namespace es920 {
 
         bool route2(const uint16_t addr) {
             if ((addr < 0x0001) || (addr > 0xFFFE)) {
-                LOG_WARNING("route2 is out of range : ", arx::str::to_hex(addr));
+                LOG_WARN("route2 is out of range : ", arx::str::to_hex(addr));
                 return false;
             }
             this->configurator.route2(addr);
@@ -859,7 +859,7 @@ namespace es920 {
 
         bool route3(const uint16_t addr) {
             if ((addr < 0x0001) || (addr > 0xFFFE)) {
-                LOG_WARNING("route3 is out of range : ", arx::str::to_hex(addr));
+                LOG_WARN("route3 is out of range : ", arx::str::to_hex(addr));
                 return false;
             }
             this->configurator.route3(addr);
@@ -902,7 +902,7 @@ namespace es920 {
         // {
         //     if (fps.isRunning() && !fps.isNext())
         //     {
-        //         LOG_WARNING("you must wait until the next timing...");
+        //         LOG_WARN("you must wait until the next timing...");
         //         return false;
         //     }
         //     return true;

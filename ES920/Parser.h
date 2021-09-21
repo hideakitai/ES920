@@ -88,7 +88,7 @@ namespace es920 {
 
         void popBackBinary() { bin_parser.pop_back(); }
         void popBackAscii() {
-            LOG_WARNING("subghz pop_back in Ascii is not implemented");
+            LOG_WARN("subghz pop_back in Ascii is not implemented");
             ;
         }  // TODO:
 
@@ -123,16 +123,16 @@ namespace es920 {
         }
 
         Mode detectMode(const uint32_t timeout_ms) {
-            LOG_VERBOSE("mode detection start: wait for mode detection...");
+            LOG_INFO("mode detection start: wait for mode detection...");
             waitResponseAscii(timeout_ms);
 
             if (asc_parser.hasWakeup()) {
-                LOG_VERBOSE("wakeup message has come!");
-                LOG_VERBOSE("detected mode is: configuration");
+                LOG_INFO("wakeup message has come!");
+                LOG_INFO("detected mode is: configuration");
                 return asc_parser.detectedMode();
             } else {
-                LOG_VERBOSE("no wakeup message");
-                LOG_VERBOSE("detected mode is: (maybe) operation mode");
+                LOG_INFO("no wakeup message");
+                LOG_INFO("detected mode is: (maybe) operation mode");
                 return Mode::OPERATION;
             }
         }
@@ -163,7 +163,7 @@ namespace es920 {
                 parseAscii(false, false);
                 if (hasReplyAscii()) return true;
             }
-            LOG_VERBOSE("no reply from ascii parser");
+            LOG_INFO("no reply from ascii parser");
             return false;
         }
 

@@ -147,7 +147,7 @@ namespace es920 {
                 b_reply = true;
                 b_error = false;
                 error_code = "000";
-                LOG_VERBOSE("received OK");
+                LOG_INFO("received OK");
             } else if (
                 (ES920_STRING_SIZE(str) == 6) &&
                 (ES920_STRING_SUBSTR(str, 0, 3) == line_ng)) {
@@ -162,19 +162,19 @@ namespace es920 {
                 b_reply = true;
                 b_version = true;
                 version_str = ES920_STRING_SUBSTR(str, 3, 4);
-                LOG_VERBOSE("version message is detected!!! ver =", version_str);
+                LOG_INFO("version message is detected!!! ver =", version_str);
             } else if (ES920_STRING_SUBSTR(str, 0, 3) == line_reset) {
                 b_reset = true;
                 b_wakeup = false;
-                LOG_VERBOSE("reset message is detected!!!");
+                LOG_INFO("reset message is detected!!!");
             } else if (str == line_config) {
                 b_wakeup = true;
                 mode = Mode::CONFIG;
-                LOG_VERBOSE("wakeup message (config) is detected!!! mode =", (int)mode);
+                LOG_INFO("wakeup message (config) is detected!!! mode =", (int)mode);
             } else if (str == line_operation) {
                 b_wakeup = true;
                 mode = Mode::OPERATION;
-                LOG_VERBOSE("wakeup message (operation) is detected!!! mode =", (int)mode);
+                LOG_INFO("wakeup message (operation) is detected!!! mode =", (int)mode);
             } else {
                 if (PAYLOAD_SIZE == PAYLOAD_SIZE_ES920)
                     parsePayloadES920(str, b_rssi, b_rcvid);
@@ -195,9 +195,9 @@ namespace es920 {
                     remote_hopid = ES920_STRING_SUBSTR(str, data_head + 4, 4);
                     remote_ownid = ES920_STRING_SUBSTR(str, data_head + 8, 4);
                     data_head += 12;
-                    LOG_VERBOSE("got remote panid :", remote_panid);
-                    LOG_VERBOSE("got remote hopid :", remote_hopid);
-                    LOG_VERBOSE("got remote ownid :", remote_ownid);
+                    LOG_INFO("got remote panid :", remote_panid);
+                    LOG_INFO("got remote hopid :", remote_hopid);
+                    LOG_INFO("got remote ownid :", remote_ownid);
                 }
                 payloads.push_back(ES920_STRING_SUBSTR(str, data_head, ES920_STRING_SIZE(str) - data_head));
             } else {
@@ -211,14 +211,14 @@ namespace es920 {
                 if (b_rssi) {
                     remote_rssi = ES920_STRING_TO_INT(ES920_STRING_SUBSTR(str, data_head, 4));
                     data_head += 4;
-                    LOG_VERBOSE("got rssi :", remote_rssi);
+                    LOG_INFO("got rssi :", remote_rssi);
                 }
                 if (b_rcvid) {
                     remote_panid = ES920_STRING_SUBSTR(str, data_head, 4);
                     remote_ownid = ES920_STRING_SUBSTR(str, data_head + 4, 4);
                     data_head += 8;
-                    LOG_VERBOSE("got remote panid :", remote_panid);
-                    LOG_VERBOSE("got remote ownid :", remote_ownid);
+                    LOG_INFO("got remote panid :", remote_panid);
+                    LOG_INFO("got remote ownid :", remote_ownid);
                 }
                 payloads.push_back(ES920_STRING_SUBSTR(str, data_head, ES920_STRING_SIZE(str) - data_head));
             } else {

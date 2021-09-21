@@ -22,7 +22,7 @@ namespace es920 {
         bool sendPayload(const StringType& str) {
             if (ES920_STRING_SIZE(str) + 2 > PAYLOAD_SIZE)  // exclude "\r\n"
             {
-                LOG_WARNING("too long data, must be <= ", PAYLOAD_SIZE - 2, ". size = ", ES920_STRING_SIZE(str));
+                LOG_WARN("too long data, must be <= ", PAYLOAD_SIZE - 2, ". size = ", ES920_STRING_SIZE(str));
                 return false;
             } else {
                 ES920_WRITE_BYTES(str.c_str(), ES920_STRING_SIZE(str));
@@ -33,11 +33,11 @@ namespace es920 {
 
         bool sendPayload(const uint8_t* data, const uint8_t size, const uint8_t index) {
             if (size + 4 > PAYLOAD_SIZE)  // exclude header, index, size, footer
-                LOG_WARNING("too long input data, must be <= ", PAYLOAD_SIZE - 4, ". size = ", size);
+                LOG_WARN("too long input data, must be <= ", PAYLOAD_SIZE - 4, ". size = ", size);
             else {
                 packer.encode(index, data, size, true);
                 if (packer.size() > PAYLOAD_SIZE)
-                    LOG_WARNING("too long packetized data, must be <= ", PAYLOAD_SIZE, ". size = ", size);
+                    LOG_WARN("too long packetized data, must be <= ", PAYLOAD_SIZE, ". size = ", size);
                 else {
                     ES920_WRITE_BYTE((uint8_t)packer.size());
                     ES920_WRITE_BYTES(packer.data(), packer.size());
@@ -50,7 +50,7 @@ namespace es920 {
         // TODO: extend to ES920 format
         bool sendFrame(const uint16_t pan, const uint16_t own, const StringType& str) {
             if (ES920_STRING_SIZE(str) + 2 > PAYLOAD_SIZE)  // exclude "\r\n"
-                LOG_WARNING("too long data, must be <= ", PAYLOAD_SIZE - 2, ". size = ", ES920_STRING_SIZE(str));
+                LOG_WARN("too long data, must be <= ", PAYLOAD_SIZE - 2, ". size = ", ES920_STRING_SIZE(str));
             else {
                 StringType header = arx::str::to_hex(pan) + arx::str::to_hex(own);
                 ES920_WRITE_BYTES(header.c_str(), ES920_STRING_SIZE(header));
@@ -64,7 +64,7 @@ namespace es920 {
         // TODO: extend to ES920 format
         bool sendFrame(const uint16_t pan, const uint16_t own, const uint8_t* data, const uint8_t size, const uint8_t index) {
             if (size > PAYLOAD_SIZE)
-                LOG_WARNING("too long data, must be <= ", PAYLOAD_SIZE, ". size = ", size);
+                LOG_WARN("too long data, must be <= ", PAYLOAD_SIZE, ". size = ", size);
             else {
                 StringType header = arx::str::to_hex(pan) + arx::str::to_hex(own);
                 uint8_t size_ext = (uint8_t)ES920_STRING_SIZE(header) + size;
@@ -72,7 +72,7 @@ namespace es920 {
                 ES920_WRITE_BYTES(header.c_str(), ES920_STRING_SIZE(header));
                 packer.encode(index, data, size, true);
                 if (packer.size() > PAYLOAD_SIZE)
-                    LOG_WARNING("too long packetized data, must be <= ", PAYLOAD_SIZE, ". size = ", size);
+                    LOG_WARN("too long packetized data, must be <= ", PAYLOAD_SIZE, ". size = ", size);
                 else {
                     ES920_WRITE_BYTES(packer.data(), packer.size());
                     return true;

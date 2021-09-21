@@ -200,7 +200,7 @@ namespace es920 {
                 b_error = false;
                 error_code = "000";
                 ES920_STRING_ERASE(buffer, 0, 3);
-                LOG_VERBOSE("send OK, BINARY");
+                LOG_INFO("send OK, BINARY");
                 return true;
             }
 
@@ -238,9 +238,9 @@ namespace es920 {
                     remote_panid = ES920_STRING_SUBSTR(buffer, data_head + 0, 4);
                     remote_hopid = ES920_STRING_SUBSTR(buffer, data_head + 4, 4);
                     remote_ownid = ES920_STRING_SUBSTR(buffer, data_head + 8, 4);
-                    LOG_VERBOSE("got remote panid :", remote_panid);
-                    LOG_VERBOSE("got remote hopid :", remote_hopid);
-                    LOG_VERBOSE("got remote ownid :", remote_ownid);
+                    LOG_INFO("got remote panid :", remote_panid);
+                    LOG_INFO("got remote hopid :", remote_hopid);
+                    LOG_INFO("got remote ownid :", remote_ownid);
                 }
                 ES920_STRING_ERASE(buffer, 0, header_size);
                 return true;
@@ -255,13 +255,13 @@ namespace es920 {
                 if (b_rssi) {
                     remote_rssi = ES920_STRING_TO_INT(ES920_STRING_SUBSTR(buffer, data_head, 4));
                     data_head += 4;
-                    LOG_VERBOSE("got rssi :", remote_rssi);
+                    LOG_INFO("got rssi :", remote_rssi);
                 }
                 if (b_rcvid) {
                     remote_panid = ES920_STRING_SUBSTR(buffer, data_head, 4);
                     remote_ownid = ES920_STRING_SUBSTR(buffer, data_head + 4, 4);
-                    LOG_VERBOSE("got remote panid :", remote_panid);
-                    LOG_VERBOSE("got remote ownid :", remote_ownid);
+                    LOG_INFO("got remote panid :", remote_panid);
+                    LOG_INFO("got remote ownid :", remote_ownid);
                 }
                 ES920_STRING_ERASE(buffer, 0, header_size);
                 return true;
