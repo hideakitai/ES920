@@ -111,12 +111,18 @@ namespace es920 {
             const Config& cfg,
             const bool b_config_check = true,
             const bool b_force_config = true,
-            const bool b_verbose = false) {
+            const bool b_verbose = false
+#ifdef ESP_PLATFORM
+            ,
+            const int8_t pin_rx = -1,
+            const int8_t pin_tx = -1
+#endif
+            ) {
             attach(s, cfg, b_verbose);
 
 #ifdef ARDUINO
 #ifdef ESP_PLATFORM
-            s.begin(configToBaudrate(cfg.baudrate));
+            s.begin(configToBaudrate(cfg.baudrate), SERIAL_8N1, pin_rx, pin_tx);
 #endif
             reset();
             if (!b_config_check) return detectReset();
