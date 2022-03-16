@@ -672,9 +672,9 @@ namespace es920 {
         }
 
         // for debug
-        void verbose(const bool b) { LOG_SET_LEVEL(b ? DebugLogLevel::INFO : DebugLogLevel::ERROR); }
+        void verbose(const bool b) { LOG_SET_LEVEL(b ? DebugLogLevel::LVL_INFO : DebugLogLevel::LVL_ERROR); }
 #ifndef NDEBUG
-        bool verbose() const { return LOG_GET_LEVEL() == DebugLogLevel::INFO; }
+        bool verbose() const { return LOG_GET_LEVEL() == DebugLogLevel::LVL_INFO; }
 #endif
 
     private:
