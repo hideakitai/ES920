@@ -143,13 +143,14 @@ namespace es920 {
 
     private:
         void parseReply(const StringType& str, const bool b_rssi, const bool b_rcvid) {
+            const size_t str_size = ES920_STRING_SIZE(str);
             if (str == line_ok) {
                 b_reply = true;
                 b_error = false;
                 error_code = "000";
                 LOG_INFO("received OK");
             } else if (
-                (ES920_STRING_SIZE(str) == 6) &&
+                (str_size == 6) &&
                 (ES920_STRING_SUBSTR(str, 0, 3) == line_ng)) {
                 b_reply = true;
                 b_error = true;
@@ -157,16 +158,12 @@ namespace es920 {
                 error_count++;
                 LOG_ERROR("received error :", error_code, ", error count =", error_count);
             } else if (
-                (ES920_STRING_SIZE(str) == 8) &&
+                (str_size == 8) &&
                 (ES920_STRING_SUBSTR(str, 0, 3) == line_ver)) {
                 b_reply = true;
                 b_version = true;
                 version_str = ES920_STRING_SUBSTR(str, 3, 4);
                 LOG_INFO("version message is detected!!! ver =", version_str);
-            } else if (ES920_STRING_SUBSTR(str, 0, 3) == line_reset) {
-                b_reset = true;
-                b_wakeup = false;
-                LOG_INFO("reset message is detected!!!");
             } else if (str == line_config) {
                 b_wakeup = true;
                 mode = Mode::CONFIG;
@@ -175,6 +172,12 @@ namespace es920 {
                 b_wakeup = true;
                 mode = Mode::OPERATION;
                 LOG_INFO("wakeup message (operation) is detected!!! mode =", (int)mode);
+            } else if (
+                (str_size >= 3) &&
+                (ES920_STRING_SUBSTR(str, str_size - 3, str_size) == line_reset)) {
+                b_reset = true;
+                b_wakeup = false;
+                LOG_INFO("reset message is detected!!!");
             } else {
                 if (PAYLOAD_SIZE == PAYLOAD_SIZE_ES920)
                     parsePayloadES920(str, b_rssi, b_rcvid);
