@@ -123,6 +123,8 @@ namespace es920 {
 #ifdef ARDUINO
 #ifdef ESP_PLATFORM
             s.begin(configToBaudrate(cfg.baudrate), SERIAL_8N1, pin_rx, pin_tx);
+#else
+            s.begin(configToBaudrate(cfg.baudrate));
 #endif
             reset();
             if (!b_config_check) return detectReset();
