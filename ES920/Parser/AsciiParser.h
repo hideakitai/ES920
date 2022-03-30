@@ -174,7 +174,8 @@ namespace es920 {
                 LOG_INFO("wakeup message (operation) is detected!!! mode =", (int)mode);
             } else if (
                 (str_size >= 3) &&
-                (ES920_STRING_SUBSTR(str, str_size - 3, str_size) == line_reset)) {
+                ((ES920_STRING_SUBSTR(str, 0, 3) == line_reset) ||
+                (ES920_STRING_SUBSTR(str, str_size - 3, str_size) == line_reset))) {
                 b_reset = true;
                 b_wakeup = false;
                 LOG_INFO("reset message is detected!!!");
