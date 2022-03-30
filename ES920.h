@@ -815,6 +815,7 @@ namespace es920 {
 #ifdef ESP_PLATFORM
             s.updateBaudRate(configToBaudrate(configs.baudrate));
 #else
+            ES920_SERIAL_END(s);
             ES920_SERIAL_BEGIN(s, configToBaudrate(configs.baudrate));
 #endif
 #elif defined OF_VERSION_MAJOR
