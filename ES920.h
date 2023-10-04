@@ -5,9 +5,9 @@
 #define PACKETIZER_USE_INDEX_AS_DEFAULT
 #define PACKETIZER_USE_CRC_AS_DEFAULT
 
-#include "ES920/util/Packetizer/Packetizer.h"
-#include "ES920/util/DebugLog/DebugLog.h"
-#include "ES920/util/ArxStringUtils/ArxStringUtils.h"
+#include <Packetizer.h>
+#include <DebugLog.h>
+#include <ArxStringUtils.h>
 
 #ifndef ARDUINO
 #include <string>
@@ -16,9 +16,9 @@
 #endif
 
 #ifdef ES920_DEBUGLOG_ENABLE
-#include "ES920/util/DebugLog/DebugLogEnable.h"
+#include <DebugLogEnable.h>
 #else
-#include "ES920/util/DebugLog/DebugLogDisable.h"
+#include <DebugLogDisable.h>
 #endif
 
 #include "ES920/Constants.h"
@@ -969,6 +969,6 @@ namespace es920 {
 
 namespace ES920 = arduino::es920;
 
-#include "ES920/util/DebugLog/DebugLogRestoreState.h"
+#include <DebugLogRestoreState.h>
 
 #endif  // ARDUINO_ES920_H
