@@ -4,7 +4,7 @@
 
 #include "Constants.h"
 #include "Utils.h"
-#include "util/Packetizer/Packetizer.h"
+#include <Packetizer.h>
 
 namespace arduino {
 namespace es920 {

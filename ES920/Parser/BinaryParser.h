@@ -3,7 +3,7 @@
 #define ARDUINO_ES920_BINARY_PARSER_H
 
 #include "../Constants.h"
-#include "../util/Packetizer/Packetizer.h"
+#include <Packetizer.h>
 
 namespace arduino {
 namespace es920 {

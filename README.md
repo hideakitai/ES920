@@ -580,11 +580,14 @@ namespace ChannelBW500kHz {
 }
 ```
 
+## Dependent Libraries
+
+- [ArxContainer](https://github.com/hideakitai/ArxContainer)
+- [ArxStringUtils](https://github.com/hideakitai/ArxStringUtils)
+- [DebugLog](https://github.com/hideakitai/DebugLog)
+- [Packetizer](https://github.com/hideakitai/Packetizer)
 ## Embedded Libraries
 
-- [ArxStringUtils v0.2.10](https://github.com/hideakitai/ArxStringUtils)
-- [DebugLog v0.6.6](https://github.com/hideakitai/DebugLog)
-- [Packetizer v0.7.0](https://github.com/hideakitai/Packetizer)
 - [TeensyDirtySTLErrorSolution v0.1.0](https://github.com/hideakitai/TeensyDirtySTLErrorSolution)
 
 
