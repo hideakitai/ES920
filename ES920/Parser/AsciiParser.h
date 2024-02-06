@@ -11,7 +11,7 @@ namespace es920 {
 #if ARX_HAVE_LIBSTDCPLUSPLUS >= 201103L  // Have libstdc++11
     using Buffer = std::deque<StringType>;
 #else
-    using Buffer = arx::deque<StringType, 4>;
+    using Buffer = arx::stdx::deque<StringType, 4>;
 #endif
     // typedef void (*AsciiCallbackType)(const StringType& str);
     using AsciiCallbackType = std::function<void(const StringType& str)>;
