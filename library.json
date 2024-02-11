@@ -11,15 +11,15 @@
         "url": "https://github.com/hideakitai",
         "maintainer": true
     },
-    "version": "0.2.0",
+    "version": "0.3.0",
     "license": "MIT",
     "frameworks": "arduino",
     "platforms": "*",
     "dependencies":
     {
-        "hideakitai/ArxContainer": "*",
-        "hideakitai/ArxStringUtils": "*",
-        "hideakitai/DebugLog": "*",
+        "hideakitai/ArxContainer": ">=0.6.0",
+        "hideakitai/ArxStringUtils": ">=0.3.1",
+        "hideakitai/DebugLog": ">=0.8.1",
         "hideakitai/Packetizer": "*"
     }
 }
